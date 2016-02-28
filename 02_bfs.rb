@@ -4,30 +4,30 @@ $LOAD_PATH.unshift File.expand_path('lib', __dir__)
 
 require 'graph'
 
-adjacency_list = Graph.new(12)
+graph = Graph.new(12)
 
-adjacency_list << [1, 3]
-adjacency_list << [1, 4]
-adjacency_list << [2, 3]
-adjacency_list << [2, 4]
-adjacency_list << [2, 5]
-adjacency_list << [2, 7]
-adjacency_list << [2, 8]
-adjacency_list << [2, 12]
-adjacency_list << [3, 5]
-adjacency_list << [3, 12]
-adjacency_list << [4, 7]
-adjacency_list << [4, 9]
-adjacency_list << [5, 7]
-adjacency_list << [5, 8]
-adjacency_list << [5, 12]
-adjacency_list << [6, 8]
-adjacency_list << [6, 10]
-adjacency_list << [7, 8]
-adjacency_list << [7, 9]
-adjacency_list << [9, 10]
-adjacency_list << [10, 11]
+graph << [1, 3]
+graph << [1, 4]
+graph << [2, 3]
+graph << [2, 4]
+graph << [2, 5]
+graph << [2, 7]
+graph << [2, 8]
+graph << [2, 12]
+graph << [3, 5]
+graph << [3, 12]
+graph << [4, 7]
+graph << [4, 9]
+graph << [5, 7]
+graph << [5, 8]
+graph << [5, 12]
+graph << [6, 8]
+graph << [6, 10]
+graph << [7, 8]
+graph << [7, 9]
+graph << [9, 10]
+graph << [10, 11]
 
-adjacency_list.breadth_first_search(11)
+graph.breadth_first_search(11)
 
-puts adjacency_list.inspect
+puts graph.inspect
