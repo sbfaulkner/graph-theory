@@ -4,7 +4,7 @@ $LOAD_PATH.unshift File.expand_path('lib', __dir__)
 
 require 'graph'
 
-graph = Graph.new(10, directed: true)
+graph = Graph.new(11, directed: true)
 
 graph << [1, 2]
 graph << [1, 3]
@@ -16,6 +16,8 @@ graph << [5, 6]
 graph << [7, 8]
 graph << [8, 9]
 graph << [9, 10]
+graph << [9, 11]
+graph << [10, 11]
 
 graph.depth_first_search
 

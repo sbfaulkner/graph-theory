@@ -56,11 +56,29 @@ class Graph
       any
     end
 
-    def depth_first_search(parent = :none)
+    def depth_first_search(parent = :none, level = 0)
+      self.level = level
       self.parent = parent
 
       edges.each do |vertex|
-        vertex.depth_first_search(self) unless vertex.parent?
+        STDERR.puts "#{vertex.depth_first_search_edge_type(parent)} edge: #{id} -> #{vertex.id}"
+        next if vertex.parent?
+        vertex.depth_first_search(self)
+      end
+
+      self.level = nil
+    end
+
+    def depth_first_search_edge_type(parent)
+      case
+      when self.parent == parent
+        'cross'
+      when level?
+        'backward'
+      when parent?
+        'forward'
+      else
+        'tree'
       end
     end
   end
