@@ -102,14 +102,14 @@ class Graph
   end
 
   def shortest_path(start, current)
-    return [current] if current == start
-
     vertex = vertices[current - 1]
 
+    return [vertex] if current == start
+
     if vertex.parent.nil?
-      shortest_path(start, start) << current
+      shortest_path(start, start) << vertex
     else
-      shortest_path(start, vertex.parent.id) << current
+      shortest_path(start, vertex.parent.id) << vertex
     end
   end
 end

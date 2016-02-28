@@ -4,11 +4,26 @@ $LOAD_PATH.unshift File.expand_path('lib', __dir__)
 
 require 'graph'
 
-def build_graph
-  Graph.new(100, directed: true) do |graph|
-    # roll the dice
-    (1..99).each do |space|
-      (1..[100 - space, 6].min).each { |move| graph << [space, space + move] }
+class SnakesAndLadders < Graph
+  def initialize(name)
+    @name = name
+    super(100, directed: true) do |graph|
+      # roll the dice
+      (1..99).each do |space|
+        (1..[100 - space, 6].min).each { |move| graph << [space, space + move] }
+      end
+    end
+  end
+
+  def print_shortest_path
+    breadth_first_search(1)
+
+    path = shortest_path(1, 100)
+
+    if moves = path.last.level
+      puts "#{@name} can be won in #{moves} moves (#{path.map(&:id).join(' -> ')})"
+    else
+      puts "#{@name} cannot be won"
     end
   end
 end
@@ -16,7 +31,7 @@ end
 #
 # scenario # 1
 #
-graph = build_graph
+graph = SnakesAndLadders.new("Game 1")
 
 # ladders
 graph.replace(32, 62)
@@ -32,19 +47,13 @@ graph.replace(75, 19)
 graph.replace(49, 47)
 graph.replace(67, 17)
 
-graph.breadth_first_search(1)
-
-path = graph.shortest_path(1, 100)
-moves = path.length - 1
-
-puts "#{moves} moves required"
-puts path.join(' -> ')
+graph.print_shortest_path
 
 
 #
 # scenario # 2
 #
-graph = build_graph
+graph = SnakesAndLadders.new("Game 2")
 
 # ladders
 graph.replace(8, 52)
@@ -61,12 +70,26 @@ graph.replace(59, 5)
 graph.replace(79, 23)
 graph.replace(53, 7)
 graph.replace(43, 33)
-graph.replace(77, 21 )
+graph.replace(77, 21)
 
-graph.breadth_first_search(1)
+graph.print_shortest_path
 
-path = graph.shortest_path(1, 100)
-moves = path.length - 1
 
-puts "#{moves} moves required"
-puts path.join(' -> ')
+#
+# scenario # 3
+#
+graph = SnakesAndLadders.new("Game 3")
+
+# ladders
+graph.replace(3, 90)
+
+# snakes
+graph.replace(99, 10)
+graph.replace(97, 20)
+graph.replace(98, 30)
+graph.replace(96, 40)
+graph.replace(95, 50)
+graph.replace(94, 60)
+graph.replace(93, 70)
+
+graph.print_shortest_path
