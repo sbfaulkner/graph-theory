@@ -23,6 +23,7 @@ This repo is my exploration of Graph Theory, as guided by http://theoryofprogram
 
 ## exercise 5 - http://theoryofprogramming.com/2015/01/11/dijkstras-algorithm/
 
+- side exercises required for priority queue and heap implementations
 - explain and implement Dijkstra's algorithm
 
 ## exercise 6 - http://theoryofprogramming.com/2015/01/19/bellman-ford-algorithm/
