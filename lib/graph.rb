@@ -1,21 +1,27 @@
 class Graph
   class Vertex
     def initialize(id)
-      @id     = id
-      @level  = nil
-      @parent = nil
-      @edges  = []
+      @id       = id
+      @level    = nil
+      @parent   = nil
+      @edges    = []
     end
 
     attr_reader :id, :level, :parent, :edges
     attr_writer :level, :parent
+    alias traversed? level
 
     def <<(vertex)
       edges << vertex
     end
 
     def inspect
-      "<#{id}: level=#{level.inspect}, parent=#{parent ? parent.id : 'nil'} #{edges.map(&:id).inspect}>"
+      "<#{id}->[#{edges.map(&:id).join('->')}] level=#{level.inspect}, parent=#{parent ? parent.id : 'nil'}>"
+    end
+
+    def replace(original, replacement)
+      return unless offset = edges.index(original)
+      edges[offset] = replacement
     end
 
     def reset
@@ -27,7 +33,7 @@ class Graph
 
       level += 1 while yield(level)
 
-      self
+      level
     end
 
     def continue_breadth_first_search(level)
@@ -44,27 +50,29 @@ class Graph
 
       any
     end
-
-    def traversed?
-      @level
-    end
   end
 
-  def initialize(vertices)
+  def initialize(vertices, directed: false)
     @vertices = Array.new(vertices) { |i| Vertex.new(i + 1) }
+    @directed = directed
+
+    yield self if block_given?
   end
 
-  attr_reader :vertices
+  attr_reader :directed, :vertices
+  alias directed? directed
 
   def <<(edge)
     x, y = edge
-    vertices[x - 1] << vertices[y - 1]
-    vertices[y - 1] << vertices[x - 1]
+    x -= 1
+    y -= 1
+    vertices[x] << vertices[y]
+    vertices[y] << vertices[x] unless directed?
     self
   end
 
   def breadth_first_search(start)
-    reset
+    vertices.each(&:reset)
 
     vertices[start - 1].breadth_first_search do |level|
       processing = false
@@ -72,14 +80,36 @@ class Graph
       vertices.each do |vertex|
         next unless vertex.level == level
 
-        processing ||= vertex.continue_breadth_first_search(level)
+        processing = vertex.continue_breadth_first_search(level) || processing
       end
 
       processing
     end
   end
 
-  def reset
-    vertices.each(&:reset)
+  def inspect
+    "<#{directed? ? 'directed' : 'undirected'} graph: #{@vertices.inspect}>"
+  end
+
+  def replace(original, replacement)
+    original    = vertices[original - 1]
+    replacement = vertices[replacement - 1]
+
+    vertices.each { |vertex| vertex.replace(original, replacement) }
+    original.edges.clear
+
+    self
+  end
+
+  def shortest_path(start, current)
+    return [current] if current == start
+
+    vertex = vertices[current - 1]
+
+    if vertex.parent.nil?
+      shortest_path(start, start) << current
+    else
+      shortest_path(start, vertex.parent.id) << current
+    end
   end
 end
