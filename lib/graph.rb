@@ -9,14 +9,19 @@ class Graph
 
     attr_reader :id, :level, :parent, :edges
     attr_writer :level, :parent
-    alias traversed? level
+
+    alias level? level
+    alias parent? parent
 
     def <<(vertex)
-      edges << vertex
+      edges.unshift vertex
     end
 
     def inspect
-      "<#{id}->[#{edges.map(&:id).join('->')}] level=#{level.inspect}, parent=#{parent ? parent.id : 'nil'}>"
+      adjacencies = edges.map(&:id).join('->')
+      parent_id = parent.is_a?(Vertex) ? parent.id : parent.to_s
+
+      "<#{id}->[#{adjacencies}] parent=#{parent_id}, level=#{level.inspect}>"
     end
 
     def replace(original, replacement)
@@ -40,7 +45,7 @@ class Graph
       any = false
 
       edges.each do |vertex|
-        next if vertex.traversed?
+        next if vertex.level?
 
         vertex.level  = level + 1
         vertex.parent = self
@@ -49,6 +54,14 @@ class Graph
       end
 
       any
+    end
+
+    def depth_first_search(parent = :none)
+      self.parent = parent
+
+      edges.each do |vertex|
+        vertex.depth_first_search(self) unless vertex.parent?
+      end
     end
   end
 
@@ -87,6 +100,14 @@ class Graph
     end
   end
 
+  def depth_first_search
+    vertices.each(&:reset)
+
+    vertices.each do |vertex|
+      vertex.depth_first_search unless vertex.parent?
+    end
+  end
+
   def inspect
     "<#{directed? ? 'directed' : 'undirected'} graph: #{@vertices.inspect}>"
   end
@@ -106,10 +127,10 @@ class Graph
 
     return [vertex] if current == start
 
-    if vertex.parent.nil?
-      shortest_path(start, start) << vertex
-    else
+    if vertex.parent?
       shortest_path(start, vertex.parent.id) << vertex
+    else
+      shortest_path(start, start) << vertex
     end
   end
 end

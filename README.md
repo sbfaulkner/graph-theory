@@ -16,3 +16,7 @@ This repo is my exploration of Graph Theory, as guided by http://theoryofprogram
 
 - explains modeling of snakes and ladders as a graph
 - explain and implement breadth first search to find shortest path for completion of snakes and ladders
+
+## exercise 4 - http://theoryofprogramming.com/2014/12/26/depth-first-search-algorithm/
+
+- explain and implement depth first search algorithm

@@ -1,4 +1,4 @@
-# http://theoryofprogramming.com/2014/12/25/breadth-first-search-algorithm/
+# http://theoryofprogramming.com/2014/12/25/snakes-and-ladders-game-code/
 
 $LOAD_PATH.unshift File.expand_path('lib', __dir__)
 
