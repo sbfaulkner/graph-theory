@@ -12,26 +12,16 @@
 $LOAD_PATH.unshift File.expand_path('lib', __dir__)
 
 require 'benchmark'
-require 'forwardable'
 
 class PriorityQueue
-  extend Forwardable
-
   def initialize
     @queue = []
   end
 
-  def_delegator :@queue, :push
-
   def pop
-    min = Float::INFINITY
-    pos = nil
-    @queue.each_with_index do |v, i|
-      next unless v < min
-      min = v
-      pos = i
-    end
-    @queue.delete_at(pos)
+  end
+
+  def push(value)
   end
 end
 

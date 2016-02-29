@@ -7,16 +7,12 @@
 # Heap = n log(n) [best = n log(n)]
 # Leonardo Heap = n log(n) [best = n]
 
+# Q: where does a Skip List fall in the order?
+
 $LOAD_PATH.unshift File.expand_path('lib', __dir__)
 
 require 'benchmark'
 require 'forwardable'
-
-require 'byebug'
-
-seed = ARGV[0] ? ARGV[0].to_i : 12_345
-puts "Seed: #{seed}"
-srand(seed)
 
 class PriorityQueue
   extend Forwardable
@@ -35,14 +31,4 @@ class PriorityQueue
   end
 end
 
-time = Benchmark.realtime do
-  queue = PriorityQueue.new
-
-  10_000.times { queue.push rand(1000) }
-
-  10_000.times { queue.pop }
-
-  puts queue.inspect
-end
-
-STDERR.printf "%.3fms elapsed\n", time * 1000
+require_relative 'test/priority_queue_test'
