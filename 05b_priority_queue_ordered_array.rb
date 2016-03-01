@@ -11,23 +11,23 @@
 
 $LOAD_PATH.unshift File.expand_path('lib', __dir__)
 
-require 'benchmark'
 require 'forwardable'
 
 class PriorityQueue
   extend Forwardable
 
   def initialize
-    @queue = []
+    @array = []
   end
 
-  def_delegator :@queue, :shift, :pop
+  def_delegator :@array, :shift, :pop
+  def_delegator :@array, :first, :peek
 
   def push(value)
-    @queue.reverse_each.with_index do |v, i|
-      return @queue.insert(-i - 1, value) if value > v
+    @array.reverse_each.with_index do |v, i|
+      return @array.insert(-i - 1, value) if value > v
     end
-    @queue.insert(0, value)
+    @array.insert(0, value)
   end
 end
 
